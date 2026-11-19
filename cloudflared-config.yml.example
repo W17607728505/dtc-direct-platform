@@ -1,0 +1,9 @@
+# Cloudflare 固定隧道配置模板（长期稳定入口）
+# 使用前先替换 TUNNEL_UUID 和 DTC_DOMAIN
+tunnel: TUNNEL_UUID
+credentials-file: C:\Users\王震\.cloudflared\TUNNEL_UUID.json
+
+ingress:
+  - hostname: DTC_DOMAIN        # 例如 dtc.yourdomain.com
+    service: http://127.0.0.1:8787
+  - service: http_status:404

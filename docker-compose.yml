@@ -1,0 +1,21 @@
+services:
+  dtc:
+    build: .
+    container_name: dtc-mvp
+    restart: unless-stopped
+    ports:
+      - "8787:8787"
+    environment:
+      HOST: 0.0.0.0
+      PORT: "8787"
+      DTC_ENV: prod
+      DTC_DATA_DIR: /app/data
+      DTC_BASE_URL: ${DTC_BASE_URL:-http://127.0.0.1:8787}
+      DTC_ENABLE_RATE_LIMIT: "1"
+      DTC_RATE_LIMIT: "120"
+      # DTC_ADMIN_TOKEN: "change-me"
+    volumes:
+      - dtc-data:/app/data
+
+volumes:
+  dtc-data:

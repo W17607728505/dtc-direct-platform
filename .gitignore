@@ -1,0 +1,18 @@
+# Python 缓存
+__pycache__/
+*.py[cod]
+
+# 运行时数据（部署后由快照恢复，不直接提交运行态）
+data/store.json
+data/store.json.tmp
+data_prodtest/
+
+# 本地配置与密钥
+.env
+config.yml
+*.json.credentials
+
+# 隧道与日志
+_dtc_*.log
+_*.txt
+*.log

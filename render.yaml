@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: dtc-direct-platform
+    runtime: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python server.py"
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: 8787
+      - key: DTC_ENV
+        value: prod
+      - key: DTC_ENABLE_RATE_LIMIT
+        value: "1"
+      - key: DTC_BASE_URL
+        value: https://dtc-direct-platform.onrender.com
+      # 持久化磁盘（Render 付费方案可用；免费方案重启后数据会重置为种子）
+      # - key: DTC_DATA_DIR
+      #   value: /data

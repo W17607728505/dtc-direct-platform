@@ -1,0 +1,28 @@
+app = "dtc-direct-platform"
+primary_region = "hkg"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  HOST = "0.0.0.0"
+  PORT = "8787"
+  DTC_ENV = "prod"
+  DTC_ENABLE_RATE_LIMIT = "1"
+
+[http_service]
+  internal_port = 8787
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "10s"
+    method = "GET"
+    path = "/api/health"
+
+[mounts]
+  source = "dtc_data"
+  destination = "/app/data"

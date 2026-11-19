@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DTC 直达用户平台 · MVP</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">D</div>
+      <div class="brand-text">
+        <b>DTC 直达平台</b>
+        <span>Decentralized · Compliant</span>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="nav-label">工作台</div>
+      <button class="nav-item active" data-view="dash"><i>▦</i>总览</button>
+      <button class="nav-item" data-view="users"><i>◍</i>用户与授权</button>
+      <button class="nav-item" data-view="products"><i>▤</i>商品发布</button>
+      <button class="nav-item" data-view="reach"><i>◎</i>精准触达</button>
+      <button class="nav-item" data-view="tracking"><i>◷</i>数据追踪</button>
+      <button class="nav-item" data-view="revenue"><i>◈</i>变现订单</button>
+      <div class="nav-label">扩展能力</div>
+      <button class="nav-item" data-view="integrations"><i>⇄</i>通道集成</button>
+      <button class="nav-item" data-view="federation"><i>✦</i>联邦网络</button>
+      <button class="nav-item" data-view="ondevice"><i>⬡</i>端侧推荐</button>
+      <button class="nav-item" data-view="growth"><i>↗</i>增长实验</button>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="pill"><span class="dot"></span> MVP 演示环境</div>
+      <p>用户授权 · 兴趣匹配 · 多通道分发 · 成交闭环</p>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">总览</h1>
+        <p id="pageSub">平台核心指标与触达漏斗</p>
+      </div>
+      <div class="topbar-actions">
+        <a class="btn ghost" href="/landing.html" target="_blank">推广落地页</a>
+        <button class="btn ghost" id="btnReset">重置演示数据</button>
+        <button class="btn primary" id="btnRefresh">刷新数据</button>
+      </div>
+    </header>
+    <div id="view" class="view"></div>
+  </main>
+</div>
+<div id="toast" class="toast"></div>
+<script src="/ondevice.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>
