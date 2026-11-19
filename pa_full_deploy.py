@@ -14,6 +14,7 @@ import json
 import mimetypes
 import os
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -50,18 +51,25 @@ def api(path, token, method="GET", data=None, multipart=None):
     elif data is not None:
         body = json.dumps(data).encode("utf-8")
         headers["Content-Type"] = "application/json"
-    req = urllib.request.Request(url, data=body, method=method, headers=headers)
-    try:
-        with urllib.request.urlopen(req, timeout=60) as r:
-            raw = r.read().decode("utf-8")
-            return r.status, (json.loads(raw) if raw else {})
-    except urllib.error.HTTPError as e:
-        raw = e.read().decode("utf-8", errors="replace")
+    last_err = None
+    for attempt in range(4):
+        req = urllib.request.Request(url, data=body, method=method, headers=headers)
         try:
-            parsed = json.loads(raw)
-        except Exception:
-            parsed = {"detail": raw[:500]}
-        return e.code, parsed
+            with urllib.request.urlopen(req, timeout=120) as r:
+                raw = r.read().decode("utf-8")
+                return r.status, (json.loads(raw) if raw else {})
+        except urllib.error.HTTPError as e:
+            raw = e.read().decode("utf-8", errors="replace")
+            try:
+                parsed = json.loads(raw)
+            except Exception:
+                parsed = {"detail": raw[:500]}
+            return e.code, parsed
+        except (TimeoutError, urllib.error.URLError, OSError) as e:
+            last_err = e
+            if attempt < 3:
+                time.sleep(2 * (attempt + 1))
+    return 0, {"detail": "network error: %s" % last_err}
 
 
 def collect_files():
@@ -84,7 +92,7 @@ def collect_files():
 def upload_files(user, token, project_home):
     files = collect_files()
     ok = fail = 0
-    for rel, full in files:
+    for i, (rel, full) in enumerate(files, 1):
         target = project_home + "/" + rel
         path = "/api/v0/user/%s/files/path%s" % (user, target)
         with open(full, "rb") as f:
@@ -95,6 +103,8 @@ def upload_files(user, token, project_home):
         else:
             fail += 1
             print("  FAIL upload %s -> HTTP %s %s" % (rel, code, res))
+        if i % 5 == 0 or i == len(files):
+            print("  进度 %d/%d (成功 %d 失败 %d)" % (i, len(files), ok, fail), flush=True)
     print("  上传完成: 成功 %d, 失败 %d" % (ok, fail))
     return ok, fail
 

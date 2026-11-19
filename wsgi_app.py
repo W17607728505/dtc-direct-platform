@@ -12,6 +12,21 @@ from http.server import BaseHTTPRequestHandler
 import server as srv
 
 
+def _ensure_seeded():
+    """WSGI 模式不会执行 server.main() 中的 seed，这里补齐：
+    首次部署或 store 被清空后自动填充演示数据，避免接口因空数据报错。"""
+    try:
+        store = srv.load_store()
+        if not store.get("meta", {}).get("seeded"):
+            srv.seed(store, getattr(srv, "BASE_URL", None))
+            srv.save_store(store)
+    except Exception as e:
+        sys.stderr.write("wsgi_app seed warning: %s\n" % e)
+
+
+_ensure_seeded()
+
+
 class _Buffer:
     """内存字节缓冲区，替代 socket 的 wfile"""
     def __init__(self):
